@@ -48,15 +48,15 @@ while [ true ]; do
   ENDTIME=$(date +%s)
   EXECTIME=$(($ENDTIME - $STARTTIME))
 #TODO: this assumes that the sleep time is the only thing causing delays 
-  RECS=$(echo "scale=2; ($LATER - $NOW) /  ($SLEEP + $EXECTIME)" | bc -l)
+  RECS=$(echo "($LATER - $NOW) /  ($SLEEP + $EXECTIME)" | bc -l)
   NOW=$LATER
   let COUNT=$COUNT+1
-  AVGTOTAL=$(echo "scale=2; $AVGTOTAL + $RECS" | bc -l)
-  AVG=$(echo "scale=2; $AVGTOTAL/$COUNT" | bc -l)
+  AVGTOTAL=$(echo "$AVGTOTAL + $RECS" | bc -l)
+  AVG=$(echo "$AVGTOTAL/$COUNT" | bc -l)
   if [ $TOTAL -gt 0 ]; then
-    PERCENT=$(echo "scale=2; $LATER / $TOTAL * 100" | bc -l)
+    PERCENT=$(echo "$LATER / $TOTAL * 100" | bc -l)
     if [ "$AVG" != "0" ]; then
-      ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}" | bc -l)
+      ETA=$(echo "mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}" | bc -l)
     fi
     echo -e "Current=$RECS/sec\tTotalAvg=$AVG/sec\tTotal=$LATER/$TOTAL $PERCENT%\t$ETA left\tExecution=$EXECTIME sec"
   else
