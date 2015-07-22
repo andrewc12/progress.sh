@@ -37,7 +37,8 @@ while [ true ]; do
   LATER=$(eval $CMD)
   ENDTIME=$(date +%s)
   EXECTIME=$(($ENDTIME - $STARTTIME))
-  RECS=$(echo "scale=2; ($LATER - $NOW) / $SLEEP" | bc -l)
+#TODO: this assumes that the sleep time is the only thing causing delays 
+  RECS=$(echo "scale=2; ($LATER - $NOW) /  ($SLEEP + $EXECTIME)" | bc -l)
   NOW=$LATER
   let COUNT=$COUNT+1
   AVGTOTAL=$(echo "scale=2; $AVGTOTAL + $RECS" | bc -l)
