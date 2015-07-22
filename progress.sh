@@ -58,8 +58,10 @@ while [ true ]; do
     if [ "$AVG" != "0" ]; then
       ETA=$(echo "mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}" | bc -l)
     fi
-    echo -e "Current=$RECS/sec\tTotalAvg=$AVG/sec\tTotal=$LATER/$TOTAL $PERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+    makedvars
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/sec\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
   else
-    echo -e "Current=$RECS/sec\tTotalAvg=$AVG/sec\tTotal=$LATER\tExecution=$EXECTIME sec"
+    makedvars
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/sec\tTotal=$DLATER\tExecution=$EXECTIME sec"
   fi
 done
