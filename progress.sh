@@ -33,7 +33,10 @@ AVGTOTAL=0
 ETA="???"
 while [ true ]; do
   sleep $SLEEP
+  STARTTIME=$(date +%s)
   LATER=$(eval $CMD)
+  ENDTIME=$(date +%s)
+  EXECTIME=$(($ENDTIME - $STARTTIME))
   RECS=$(echo "scale=2; ($LATER - $NOW) / $SLEEP" | bc -l)
   NOW=$LATER
   let COUNT=$COUNT+1
