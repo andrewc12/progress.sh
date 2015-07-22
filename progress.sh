@@ -56,7 +56,7 @@ while [ true ]; do
   if [ $TOTAL -gt 0 ]; then
     PERCENT=$(echo "$LATER / $TOTAL * 100" | bc -l)
     if [ "$AVG" != "0" ]; then
-      ETA=$(echo "mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}" | bc -l)
+      ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}" | bc -l)
     fi
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/sec\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
