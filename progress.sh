@@ -2,6 +2,7 @@
 #CMD="tail -n1 .progress | cut -d' ' -f1"
 #Updates a display version of the variables
 #The original script just reduced the accuracy of the actual variables
+#test: 'date +"%s"' $(($(date +"%s") + 100))
 function displaytime {
   local T=$1
   local D=$((T/60/60/24))
@@ -75,6 +76,8 @@ while [ true ]; do
   else
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER\tExecution=$EXECTIME sec"
+    ETATEST=displaytime $(echo "($TOTAL - $LATER)/ $AVG"| bc -l)
+    echo -e "$ETATEST"
   fi
 done
 exit 0
