@@ -90,6 +90,10 @@ function makedvars()
 }
 if [ -n "$1" ]; then
   CMD=$1
+#####CLEAN START
+  commandtoexec=$1
+#####CLEAN END
+
   if [ -n "$2" ]; then
     TOTAL=$2
     finish=$TOTAL
@@ -136,7 +140,14 @@ echo "currentinc $currentinc totalinc $totalinc"
   let COUNT=$COUNT+1
 
 #####CLEAN START
-    currentprog=$LATER
+
+#start counter
+previousprog=$currentprog
+currentprog=$(eval $commandtoexec)
+counter=$($counter + 1)
+#end counter
+
+
 currentincpertime=$(float_eval "$currentinc / $SLEEP")
 avgincpertime=$(float_eval "$totalinc / $SLEEP / $COUNT")
 eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
