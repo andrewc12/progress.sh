@@ -141,7 +141,7 @@ previousprog=$currentprog
 currentprog=$(eval $commandtoexec)
 counter=$(($counter + 1))
 #end counter
-currentinc=$(float_eval "$LATER - $NOW")
+currentinc=$(float_eval "$currentprog - $previousprog")
 totalinc=$(float_eval "$totalinc + $currentinc")
 echo "currentinc $currentinc totalinc $totalinc"
 #####CLEAN END
