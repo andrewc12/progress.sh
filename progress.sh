@@ -71,15 +71,18 @@ function displaynumpertime {
 }
 function displaytime {
   local T=$1
-  local D=$((T/60/60/24))
-  local H=$((T/60/60%24))
-  local M=$((T/60%60))
-  local S=$((T%60))
+  local floatbackup=$float_scale
+  float_scale=0
+  local D=$(float_eval "$T/60/60/24")
+  local H=$(float_eval "$T/60/60%24")
+  local M=$(float_eval "$T/60%60")
+  local S=$(float_eval "$T%60*1/1")
   [[ $D > 0 ]] && printf '%d days ' $D
   [[ $H > 0 ]] && printf '%d hours ' $H
   [[ $M > 0 ]] && printf '%d minutes ' $M
   [[ $D > 0 || $H > 0 || $M > 0 ]] && printf 'and '
   printf '%d seconds\n' $S
+  local float_scale=$floatbackup
 }
 function makedvars()
 {
@@ -179,7 +182,7 @@ cat << EOF
 Current=$currentincpertime/sec
 Avg=$avgincpertime/sec
 Progress $currentprog/$finish
-Eta=$eta secs
+Eta=$(displaytime $eta)
 EOF
   else
 cat << EOF
