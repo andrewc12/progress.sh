@@ -154,7 +154,7 @@ echo "currentinc $currentinc totalinc $totalinc"
 
 
 currentincpertime=$(float_eval "$currentinc / $SLEEP")
-avgincpertime=$(float_eval "$totalinc / $SLEEP / $COUNT")
+avgincpertime=$(float_eval "$totalinc / $SLEEP / $counter")
 eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 #####CLEAN END
