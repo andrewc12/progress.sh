@@ -56,17 +56,17 @@ function displaynumpertime {
   local RETURN=0
   local C=$1
 #  local D=$((C*60*60*24))
-  local D=$(echo "scale=0; $C * 60 * 60 *24 / 1" | bc -l)
+  local D=$(echo "scale=0; $C * 60 * 60 * 24 / 1" | bc -l)
 #  local H=$((C*60*60))
   local H=$(echo "scale=0; $C * 60 * 60 / 1" | bc -l)
 #  local M=$((C*60))
   local M=$(echo "scale=0; $C * 60 / 1" | bc -l)
 #  local S=$((C))
   local S=$(echo "scale=0; $C * 1 / 1" | bc -l)
-  [[ $D -ge 1 ]] && RETURN=$(printf '%d/day ' $D)
-  [[ $H -ge 1 ]] && RETURN=$(printf '%d/hour ' $H)
-  [[ $M -ge 1 ]] && RETURN=$(printf '%d/minute ' $M)
-  [[ $S -gt 1 ]] && RETURN=$(printf '%d/second ' $S)
+  [[ $D -ge 1 ]] && RETURN=$(printf '%.2f/day ' $(float_eval "$C * 60 * 60 * 24 / 1"))
+  [[ $H -ge 1 ]] && RETURN=$(printf '%.2f/hour ' $(float_eval "$C * 60 * 60 / 1"))
+  [[ $M -ge 1 ]] && RETURN=$(printf '%.2f/minute ' $(float_eval "$C * 60 / 1"))
+  [[ $S -gt 0 ]] && RETURN=$(printf '%.2f/second ' $(float_eval "$C * 1 / 1"))
   echo $RETURN
 }
 function displaytime {
