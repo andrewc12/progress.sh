@@ -152,9 +152,7 @@ shift $((OPTIND-1))
 #####CLEAN START
 currentprog=$(eval $commandtoexec)
 totalinc=0
-#####CLEAN END
 ETA="???"
-#####CLEAN START
 while [ true ]; do
   sleep $sleep
 #start counter
@@ -184,8 +182,6 @@ Progress $currentprog/$finish
 Eta=$eta secs
 EOF
   else
-#####CLEAN END
-#####CLEAN START
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
