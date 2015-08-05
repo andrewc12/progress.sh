@@ -92,7 +92,15 @@ while [ true ]; do
     fi
     makedvars
     DAVG=$(displaynumpertime "$AVG")
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+#    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+cat << EOF
+--------------------
+Current=$DRECS/sec
+TotalAvg=$DAVG
+Total=$DLATER/$DTOTAL $DPERCENT%
+$ETA left
+Execution=$EXECTIME sec
+EOF
   else
     makedvars
     DAVG=$(displaynumpertime "$AVG")
@@ -105,5 +113,44 @@ exit 0
 
 
 
+
+
+
+
+
+
+
+
+
+#new counter engine
+
+finish=finish
+currentinc =0
+totalinc =0
+
+#waring currentprog jumps from zero to exec
+#which screws up the avg math
+#so we do it once manualy
+currentprog=exec
+counter=0
+sleep
+
+start loop
+#start counter
+previousprog= currentprog
+currentprog=exec
+counter++
+#end counter
+
+#we use currentinc because it starts from 0
+currentinc = currentprog - previousprog
+totalinc = totalinc + currentinc
+
+currentincpertime=currentinc/sleeptime
+avgincpertime=totalinc/sleeptime/counter
+eta=finish - currentprog /avgincpertime
+
+sleep
+end loop
 
 
