@@ -3,6 +3,53 @@
 #Updates a display version of the variables
 #The original script just reduced the accuracy of the actual variables
 #test: 'date +"%s"' $(($(date +"%s") + 100))
+
+
+#http://www.linuxjournal.com/content/floating-point-math-bash
+# Floating point number functions.
+
+#####################################################################
+# Default scale used by float functions.
+
+float_scale=2
+
+
+#####################################################################
+# Evaluate a floating point number expression.
+
+function float_eval()
+{
+    local stat=0
+    local result=0.0
+    if [[ $# -gt 0 ]]; then
+        result=$(echo "scale=$float_scale; $*" | bc -q 2>/dev/null)
+        stat=$?
+        if [[ $stat -eq 0  &&  -z "$result" ]]; then stat=1; fi
+    fi
+    echo $result
+    return $stat
+}
+
+
+#####################################################################
+# Evaluate a floating point number conditional expression.
+
+function float_cond()
+{
+    local cond=0
+    if [[ $# -gt 0 ]]; then
+        cond=$(echo "$*" | bc -q 2>/dev/null)
+        if [[ -z "$cond" ]]; then cond=0; fi
+        if [[ "$cond" != 0  &&  "$cond" != 1 ]]; then cond=0; fi
+    fi
+    local stat=$((cond == 0))
+    return $stat
+}
+#####################################################################
+
+
+
+
 function displaynumpertime {
   #$(echo "scale=0; $C * 60 * 60 / 1" | bc -l)
   local RETURN=0
@@ -74,12 +121,9 @@ AVGTOTAL=0
 ETA="???"
 while [ true ]; do
   sleep $SLEEP
-  STARTTIME=$(date +%s)
   LATER=$(eval $CMD)
-  ENDTIME=$(date +%s)
-  EXECTIME=$(($ENDTIME - $STARTTIME))
 #TODO: this assumes that the sleep time is the only thing causing delays 
-  RECS=$(echo "($LATER - $NOW) /  ($SLEEP + $EXECTIME)" | bc -l)
+  RECS=$(echo "($LATER - $NOW) /  $SLEEP " | bc -l)
   NOW=$LATER
   let COUNT=$COUNT+1
   AVGTOTAL=$(echo "$AVGTOTAL + $RECS" | bc -l)
@@ -99,12 +143,11 @@ Current=$DRECS/sec
 TotalAvg=$DAVG
 Total=$DLATER/$DTOTAL $DPERCENT%
 $ETA left
-Execution=$EXECTIME sec
 EOF
   else
     makedvars
     DAVG=$(displaynumpertime "$AVG")
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER\tExecution=$EXECTIME sec"
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER"
   fi
 done
 exit 0
@@ -120,7 +163,7 @@ exit 0
 
 
 
-
+#http://www.linuxjournal.com/content/floating-point-math-bash
 
 #new counter engine
 
