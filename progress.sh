@@ -126,8 +126,6 @@ ETA="???"
 while [ true ]; do
   sleep $SLEEP
   LATER=$(eval $CMD)
-#TODO: this assumes that the sleep time is the only thing causing delays 
-  RECS=$(echo "($LATER - $NOW) /  $SLEEP " | bc -l)
 #####CLEAN START
 currentinc=$(float_eval "$LATER - $NOW")
 totalinc=$(float_eval "$totalinc + $currentinc")
@@ -145,23 +143,16 @@ eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 #####CLEAN END
 
-  AVGTOTAL=$(echo "$AVGTOTAL + $RECS" | bc -l)
-  AVG=$(echo "$AVGTOTAL/$COUNT" | bc -l)
   if [ $TOTAL -gt 0 ]; then
-    PERCENT=$(echo "$LATER / $TOTAL * 100" | bc -l)
-    if [ "$AVG" != "0" ]; then
-      ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 1440 ) { print mins/1440; print \" days\" } else {if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}}" | bc -l)
-      ETA=$(displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l))
-    fi
 #####CLEAN START
 #####CLEAN END
 #####CLEAN START
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
-Avg=$avgtincpertime/sec
-    $currentprog/$finish
-$eta/secs
+Avg=$avgincpertime/sec
+Progress $currentprog/$finish
+Eta=$eta secs
 EOF
 #####CLEAN END
   else
@@ -171,8 +162,8 @@ EOF
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
-Avg=$avgtincpertime/sec
-    $currentprog
+Avg=$avgincpertime/sec
+Progress $currentprog
 EOF
 #####CLEAN END
   fi
