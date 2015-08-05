@@ -125,8 +125,6 @@ currentprog=$(eval $commandtoexec)
 #    echo "Running of '$CMD' produced output that is not an integer.";
 #    exit 1;
 #fi
-COUNT=0
-AVGTOTAL=0
 #####CLEAN START
 totalinc=0
 #####CLEAN END
