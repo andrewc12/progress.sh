@@ -112,6 +112,11 @@ fi
 
 SLEEP=1
 NOW=$(eval $CMD)
+#####CLEAN START
+currentprog=$(eval $commandtoexec)
+#####CLEAN END
+
+
 if [ $NOW -eq $NOW 2> /dev/null ]; then
   if [ ! $NOW -ge 0 ]; then
     echo "Running of '$CMD' produced output that is not greater than or equal to 0.";
@@ -144,7 +149,7 @@ echo "currentinc $currentinc totalinc $totalinc"
 #start counter
 previousprog=$currentprog
 currentprog=$(eval $commandtoexec)
-counter=$($counter + 1)
+counter=$(($counter + 1))
 #end counter
 
 
