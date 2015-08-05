@@ -73,11 +73,10 @@ while [ true ]; do
     fi
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+    displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l)
   else
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER\tExecution=$EXECTIME sec"
-    ETATEST=displaytime $(echo "($TOTAL - $LATER)/ $AVG"| bc -l)
-    echo -e "$ETATEST"
   fi
 done
 exit 0
