@@ -88,29 +88,89 @@ function makedvars()
   DTOTAL=$(echo "scale=0; $TOTAL / 1" | bc -l)
   DPERCENT=$(echo "scale=2; $PERCENT / 1" | bc -l)
 }
-if [ -n "$1" ]; then
-  CMD=$1
+
+
+
+
+
+
+
+
+
+# A POSIX variable
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+
+# Initialize our own variables:
+#output_file=""
+#verbose=0
+finish=0
+SLEEP=1
+
+while getopts "c:t:s:" opt; do
+    case "$opt" in
+    c)  commandtoexec=$OPTARG
+        ;;
+    t)  finish=$OPTARG
+        ;;
+    s)  SLEEP=$OPTARG
+        ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+
+echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if [ -n "$1" ]; then
+#  CMD=$1
 #####CLEAN START
-  commandtoexec=$1
+#  commandtoexec=$1
 #####CLEAN END
 
-  if [ -n "$2" ]; then
-    TOTAL=$2
-    finish=$TOTAL
-    if [ ! $TOTAL -gt 0 ]; then
-      echo "ARG2 should be an integer > 0."
-      exit 1;
-    fi
-  else
-    TOTAL=0
-  fi
-else 
-  echo "ARG1 should be a command that generates an integer!"
-  echo "ARG2 (optional) should be the end integer."
-  exit 1;
-fi
+#  if [ -n "$2" ]; then
+#    TOTAL=$2
+#    #finish=$TOTAL
+#    if [ ! $TOTAL -gt 0 ]; then
+#      echo "ARG2 should be an integer > 0."
+#      exit 1;
+#    fi
+#  else
+#    TOTAL=0
+#  fi
+#else 
+#  echo "ARG1 should be a command that generates an integer!"
+#  echo "ARG2 (optional) should be the end integer."
+#  exit 1;
+#fi
 
-SLEEP=1
+#SLEEP=1
 #####CLEAN START
 currentprog=$(eval $commandtoexec)
 #####CLEAN END
@@ -153,7 +213,7 @@ eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 #####CLEAN END
 
-  if [ $TOTAL -gt 0 ]; then
+  if [ $finish -gt 0 ]; then
 #####CLEAN START
 cat << EOF
 --------------------
