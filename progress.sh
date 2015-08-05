@@ -5,7 +5,7 @@
 function makedvars()
 {
   DRECS=$(echo "scale=2; $RECS / 1" | bc -l)
-  DAVG=$(echo "scale=2; $AVG / 1" | bc -l)
+  DAVG=$(echo "scale=2; $AVG * 60 * 60 / 1" | bc -l)
   DLATER=$(echo "scale=0; $LATER / 1" | bc -l)
   DTOTAL=$(echo "scale=0; $TOTAL / 1" | bc -l)
   DPERCENT=$(echo "scale=2; $PERCENT / 1" | bc -l)
@@ -56,12 +56,12 @@ while [ true ]; do
   if [ $TOTAL -gt 0 ]; then
     PERCENT=$(echo "$LATER / $TOTAL * 100" | bc -l)
     if [ "$AVG" != "0" ]; then
-      ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}" | bc -l)
+      ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 1440 ) { print mins/1440; print \" days\" } else {if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}}" | bc -l)
     fi
     makedvars
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/sec\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
   else
     makedvars
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/sec\tTotal=$DLATER\tExecution=$EXECTIME sec"
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER\tExecution=$EXECTIME sec"
   fi
 done
