@@ -157,26 +157,28 @@ echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertim
     makedvars
 #####CLEAN END
     DAVG=$(displaynumpertime "$AVG")
-#    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+#####CLEAN START
 cat << EOF
 --------------------
-#####CLEAN START
 Current=$currentincpertime/sec
 Avg=$avgtincpertime/sec
     $currentprog/$finish
 $eta/secs
-#####CLEAN END
-Current=$DRECS/sec
-TotalAvg=$DAVG
-Total=$DLATER/$DTOTAL $DPERCENT%
-$ETA left
 EOF
+#####CLEAN END
   else
 #####CLEAN START
     makedvars
 #####CLEAN END
     DAVG=$(displaynumpertime "$AVG")
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER"
+#####CLEAN START
+cat << EOF
+--------------------
+Current=$currentincpertime/sec
+Avg=$avgtincpertime/sec
+    $currentprog
+EOF
+#####CLEAN END
   fi
 done
 exit 0
