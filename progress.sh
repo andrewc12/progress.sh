@@ -119,22 +119,31 @@ else
 fi
 COUNT=0
 AVGTOTAL=0
+#####CLEAN START
+totalinc=0
+#####CLEAN END
 ETA="???"
 while [ true ]; do
   sleep $SLEEP
   LATER=$(eval $CMD)
 #TODO: this assumes that the sleep time is the only thing causing delays 
   RECS=$(echo "($LATER - $NOW) /  $SLEEP " | bc -l)
-currentinc=$(float_eval '$LATER - $NOW')
-totalinc=$(float_eval '$totalinc + $currentinc')
+#####CLEAN START
+currentinc=$(float_eval "$LATER - $NOW")
+totalinc=$(float_eval "$totalinc + $currentinc")
+echo "currentinc $currentinc totalinc $totalinc"
+#####CLEAN END
+
   NOW=$LATER
   let COUNT=$COUNT+1
 
+#####CLEAN START
     currentprog=$LATER
-currentincpertime==$(float_eval '$currentinc / $SLEEP')
-avgincpertime=$(float_eval '$totalinc / $SLEEP / $COUNT')
-eta=$(float_eval '$finish - $currentprog /$avgincpertime')
-
+currentincpertime=$(float_eval "$currentinc / $SLEEP")
+avgincpertime=$(float_eval "$totalinc / $SLEEP / $COUNT")
+eta=$(float_eval "$finish - $currentprog /$avgincpertime")
+echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
+#####CLEAN END
 
   AVGTOTAL=$(echo "$AVGTOTAL + $RECS" | bc -l)
   AVG=$(echo "$AVGTOTAL/$COUNT" | bc -l)
@@ -144,7 +153,9 @@ eta=$(float_eval '$finish - $currentprog /$avgincpertime')
       ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 1440 ) { print mins/1440; print \" days\" } else {if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}}" | bc -l)
       ETA=$(displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l))
     fi
+#####CLEAN START
     makedvars
+#####CLEAN END
     DAVG=$(displaynumpertime "$AVG")
 #    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
 cat << EOF
@@ -155,7 +166,9 @@ Total=$DLATER/$DTOTAL $DPERCENT%
 $ETA left
 EOF
   else
+#####CLEAN START
     makedvars
+#####CLEAN END
     DAVG=$(displaynumpertime "$AVG")
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER"
   fi
