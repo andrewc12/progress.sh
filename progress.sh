@@ -105,7 +105,7 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 #output_file=""
 #verbose=0
 #finish=0
-SLEEP=1
+sleep=1
 
 while getopts "c:t:s:" opt; do
     case "$opt" in
@@ -113,7 +113,7 @@ while getopts "c:t:s:" opt; do
         ;;
     t)  finish=$OPTARG
         ;;
-    s)  SLEEP=$OPTARG
+    s)  sleep=$OPTARG
         ;;
     esac
 done
@@ -122,7 +122,7 @@ shift $((OPTIND-1))
 
 [ "$1" = "--" ] && shift
 
-echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
+#echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
 
 
 
@@ -151,16 +151,12 @@ echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
 
 #####CLEAN START
 currentprog=$(eval $commandtoexec)
-#####CLEAN END
-
-
-#####CLEAN START
 totalinc=0
 #####CLEAN END
 ETA="???"
-while [ true ]; do
-  sleep $SLEEP
 #####CLEAN START
+while [ true ]; do
+  sleep $sleep
 #start counter
 previousprog=$currentprog
 currentprog=$(eval $commandtoexec)
@@ -172,8 +168,8 @@ echo "currentinc $currentinc totalinc $totalinc"
 
 
 
-currentincpertime=$(float_eval "$currentinc / $SLEEP")
-avgincpertime=$(float_eval "$totalinc / $SLEEP / $counter")
+currentincpertime=$(float_eval "$currentinc / $sleep")
+avgincpertime=$(float_eval "$totalinc / $sleep / $counter")
 eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 
