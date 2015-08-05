@@ -154,9 +154,7 @@ echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertim
       ETA=$(displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l))
     fi
 #####CLEAN START
-    makedvars
 #####CLEAN END
-    DAVG=$(displaynumpertime "$AVG")
 #####CLEAN START
 cat << EOF
 --------------------
@@ -168,9 +166,7 @@ EOF
 #####CLEAN END
   else
 #####CLEAN START
-    makedvars
 #####CLEAN END
-    DAVG=$(displaynumpertime "$AVG")
 #####CLEAN START
 cat << EOF
 --------------------
