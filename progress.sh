@@ -2,6 +2,18 @@
 #CMD="tail -n1 .progress | cut -d' ' -f1"
 #Updates a display version of the variables
 #The original script just reduced the accuracy of the actual variables
+function displaytime {
+  local T=$1
+  local D=$((T/60/60/24))
+  local H=$((T/60/60%24))
+  local M=$((T/60%60))
+  local S=$((T%60))
+  [[ $D > 0 ]] && printf '%d days ' $D
+  [[ $H > 0 ]] && printf '%d hours ' $H
+  [[ $M > 0 ]] && printf '%d minutes ' $M
+  [[ $D > 0 || $H > 0 || $M > 0 ]] && printf 'and '
+  printf '%d seconds\n' $S
+}
 function makedvars()
 {
   DRECS=$(echo "scale=2; $RECS / 1" | bc -l)
@@ -65,3 +77,11 @@ while [ true ]; do
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER\tExecution=$EXECTIME sec"
   fi
 done
+exit 0
+
+
+
+
+
+
+
