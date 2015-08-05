@@ -5,6 +5,7 @@
 #test: 'date +"%s"' $(($(date +"%s") + 100))
 function displaynumpertime {
   #$(echo "scale=0; $C * 60 * 60 / 1" | bc -l)
+  local RETURN=0
   local C=$1
 #  local D=$((C*60*60*24))
   local D=$(echo "scale=0; $C * 60 * 60 *24 / 1" | bc -l)
@@ -13,12 +14,12 @@ function displaynumpertime {
 #  local M=$((C*60))
   local M=$(echo "scale=0; $C * 60 / 1" | bc -l)
 #  local S=$((C))
-  local S=$(echo "scale=0; $C / 1" | bc -l)
-  [[ $D > 0 ]] && printf '%d days ' $D
-  [[ $H > 0 ]] && printf '%d hours ' $H
-  [[ $M > 0 ]] && printf '%d minutes ' $M
-  [[ $D > 0 || $H > 0 || $M > 0 ]] && printf 'and '
-  printf '%d seconds\n' $S
+  local S=$(echo "scale=0; $C * 1 / 1" | bc -l)
+  [[ $D -ge 1 ]] && RETURN=$(printf '%d/day ' $D)
+  [[ $H -ge 1 ]] && RETURN=$(printf '%d/hour ' $H)
+  [[ $M -ge 1 ]] && RETURN=$(printf '%d/minute ' $M)
+  [[ $S -gt 1 ]] && RETURN=$(printf '%d/second ' $S)
+  echo $RETURN
 }
 function displaytime {
   local T=$1
@@ -89,12 +90,13 @@ while [ true ]; do
       ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 1440 ) { print mins/1440; print \" days\" } else {if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}}" | bc -l)
       ETA=$(displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l))
     fi
-    DAVG=$(displaynumpertime "$AVG")
     makedvars
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
+    DAVG=$(displaynumpertime "$AVG")
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
   else
     makedvars
-    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER\tExecution=$EXECTIME sec"
+    DAVG=$(displaynumpertime "$AVG")
+    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER\tExecution=$EXECTIME sec"
   fi
 done
 exit 0
