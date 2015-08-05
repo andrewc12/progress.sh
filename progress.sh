@@ -92,6 +92,7 @@ if [ -n "$1" ]; then
   CMD=$1
   if [ -n "$2" ]; then
     TOTAL=$2
+    finish=$TOTAL
     if [ ! $TOTAL -gt 0 ]; then
       echo "ARG2 should be an integer > 0."
       exit 1;
@@ -124,8 +125,17 @@ while [ true ]; do
   LATER=$(eval $CMD)
 #TODO: this assumes that the sleep time is the only thing causing delays 
   RECS=$(echo "($LATER - $NOW) /  $SLEEP " | bc -l)
+currentinc=$(float_eval '$LATER - $NOW')
+totalinc=$(float_eval '$totalinc + $currentinc')
   NOW=$LATER
   let COUNT=$COUNT+1
+
+    currentprog=$LATER
+currentincpertime==$(float_eval '$currentinc / $SLEEP')
+avgincpertime=$(float_eval '$totalinc / $SLEEP / $COUNT')
+eta=$(float_eval '$finish - $currentprog /$avgincpertime')
+
+
   AVGTOTAL=$(echo "$AVGTOTAL + $RECS" | bc -l)
   AVG=$(echo "$AVGTOTAL/$COUNT" | bc -l)
   if [ $TOTAL -gt 0 ]; then
