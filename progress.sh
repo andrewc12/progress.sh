@@ -141,7 +141,7 @@ echo "currentinc $currentinc totalinc $totalinc"
     currentprog=$LATER
 currentincpertime=$(float_eval "$currentinc / $SLEEP")
 avgincpertime=$(float_eval "$totalinc / $SLEEP / $COUNT")
-eta=$(float_eval "$finish - $currentprog /$avgincpertime")
+eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 #####CLEAN END
 
@@ -160,6 +160,12 @@ echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertim
 #    echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
 cat << EOF
 --------------------
+#####CLEAN START
+Current=$currentincpertime/sec
+Avg=$avgtincpertime/sec
+    $currentprog/$finish
+$eta/secs
+#####CLEAN END
 Current=$DRECS/sec
 TotalAvg=$DAVG
 Total=$DLATER/$DTOTAL $DPERCENT%
