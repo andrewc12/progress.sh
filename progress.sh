@@ -84,14 +84,6 @@ function displaytime {
   printf '%d seconds\n' $S
   local float_scale=$floatbackup
 }
-function makedvars()
-{
-  DRECS=$(echo "scale=2; $RECS / 1" | bc -l)
-  DAVG=$(echo "scale=2; $AVG * 60 * 60 / 1" | bc -l)
-  DLATER=$(echo "scale=0; $LATER / 1" | bc -l)
-  DTOTAL=$(echo "scale=0; $TOTAL / 1" | bc -l)
-  DPERCENT=$(echo "scale=2; $PERCENT / 1" | bc -l)
-}
 
 
 
