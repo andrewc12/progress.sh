@@ -2,7 +2,8 @@
 #CMD="tail -n1 .progress | cut -d' ' -f1"
 #Updates a display version of the variables
 #The original script just reduced the accuracy of the actual variables
-#test: 'date +"%s"' $(($(date +"%s") + 100))
+#test: -c 'date +"%s"' -t $(($(date +"%s") + 100))
+#test negitave target: ./progress.sh -c 'echo $((0 - $(date +"%s")))' -t $((0 - $(date +"%s") - 100))
 
 
 #http://www.linuxjournal.com/content/floating-point-math-bash
@@ -96,14 +97,14 @@ function makedvars()
 
 
 
-
+#http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 # Initialize our own variables:
 #output_file=""
 #verbose=0
-finish=0
+#finish=0
 SLEEP=1
 
 while getopts "c:t:s:" opt; do
@@ -193,6 +194,7 @@ while [ true ]; do
   sleep $SLEEP
 #####CLEAN START
 #start counter
+
 previousprog=$currentprog
 currentprog=$(eval $commandtoexec)
 counter=$(($counter + 1))
@@ -213,7 +215,7 @@ eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 #####CLEAN END
 
-  if [ $finish -gt 0 ]; then
+  if [[ $finish ]]; then
 #####CLEAN START
 cat << EOF
 --------------------
