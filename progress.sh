@@ -149,43 +149,11 @@ echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
 
 
 
-#if [ -n "$1" ]; then
-#  CMD=$1
-#####CLEAN START
-#  commandtoexec=$1
-#####CLEAN END
-
-#  if [ -n "$2" ]; then
-#    TOTAL=$2
-#    #finish=$TOTAL
-#    if [ ! $TOTAL -gt 0 ]; then
-#      echo "ARG2 should be an integer > 0."
-#      exit 1;
-#    fi
-#  else
-#    TOTAL=0
-#  fi
-#else 
-#  echo "ARG1 should be a command that generates an integer!"
-#  echo "ARG2 (optional) should be the end integer."
-#  exit 1;
-#fi
-
-#SLEEP=1
 #####CLEAN START
 currentprog=$(eval $commandtoexec)
 #####CLEAN END
 
 
-#if [ $NOW -eq $NOW 2> /dev/null ]; then
-#  if [ ! $NOW -ge 0 ]; then
-#    echo "Running of '$CMD' produced output that is not greater than or equal to 0.";
-#    exit 1;
-#  fi
-#else 
-#    echo "Running of '$CMD' produced output that is not an integer.";
-#    exit 1;
-#fi
 #####CLEAN START
 totalinc=0
 #####CLEAN END
@@ -194,7 +162,6 @@ while [ true ]; do
   sleep $SLEEP
 #####CLEAN START
 #start counter
-
 previousprog=$currentprog
 currentprog=$(eval $commandtoexec)
 counter=$(($counter + 1))
@@ -202,10 +169,6 @@ counter=$(($counter + 1))
 currentinc=$(float_eval "$currentprog - $previousprog")
 totalinc=$(float_eval "$totalinc + $currentinc")
 echo "currentinc $currentinc totalinc $totalinc"
-#####CLEAN END
-
-
-#####CLEAN START
 
 
 
@@ -213,10 +176,10 @@ currentincpertime=$(float_eval "$currentinc / $SLEEP")
 avgincpertime=$(float_eval "$totalinc / $SLEEP / $counter")
 eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
 echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
-#####CLEAN END
+
+
 
   if [[ $finish ]]; then
-#####CLEAN START
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
@@ -224,8 +187,8 @@ Avg=$avgincpertime/sec
 Progress $currentprog/$finish
 Eta=$eta secs
 EOF
-#####CLEAN END
   else
+#####CLEAN END
 #####CLEAN START
 cat << EOF
 --------------------
@@ -233,9 +196,9 @@ Current=$currentincpertime/sec
 Avg=$avgincpertime/sec
 Progress $currentprog
 EOF
-#####CLEAN END
   fi
 done
+#####CLEAN END
 exit 0
 
 
