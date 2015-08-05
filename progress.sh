@@ -111,21 +111,20 @@ else
 fi
 
 SLEEP=1
-NOW=$(eval $CMD)
 #####CLEAN START
 currentprog=$(eval $commandtoexec)
 #####CLEAN END
 
 
-if [ $NOW -eq $NOW 2> /dev/null ]; then
-  if [ ! $NOW -ge 0 ]; then
-    echo "Running of '$CMD' produced output that is not greater than or equal to 0.";
-    exit 1;
-  fi
-else 
-    echo "Running of '$CMD' produced output that is not an integer.";
-    exit 1;
-fi
+#if [ $NOW -eq $NOW 2> /dev/null ]; then
+#  if [ ! $NOW -ge 0 ]; then
+#    echo "Running of '$CMD' produced output that is not greater than or equal to 0.";
+#    exit 1;
+#  fi
+#else 
+#    echo "Running of '$CMD' produced output that is not an integer.";
+#    exit 1;
+#fi
 COUNT=0
 AVGTOTAL=0
 #####CLEAN START
@@ -134,7 +133,6 @@ totalinc=0
 ETA="???"
 while [ true ]; do
   sleep $SLEEP
-  LATER=$(eval $CMD)
 #####CLEAN START
 #start counter
 previousprog=$currentprog
@@ -146,8 +144,6 @@ totalinc=$(float_eval "$totalinc + $currentinc")
 echo "currentinc $currentinc totalinc $totalinc"
 #####CLEAN END
 
-  NOW=$LATER
-  let COUNT=$COUNT+1
 
 #####CLEAN START
 
