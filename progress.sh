@@ -136,6 +136,11 @@ while [ true ]; do
   sleep $SLEEP
   LATER=$(eval $CMD)
 #####CLEAN START
+#start counter
+previousprog=$currentprog
+currentprog=$(eval $commandtoexec)
+counter=$(($counter + 1))
+#end counter
 currentinc=$(float_eval "$LATER - $NOW")
 totalinc=$(float_eval "$totalinc + $currentinc")
 echo "currentinc $currentinc totalinc $totalinc"
@@ -146,11 +151,6 @@ echo "currentinc $currentinc totalinc $totalinc"
 
 #####CLEAN START
 
-#start counter
-previousprog=$currentprog
-currentprog=$(eval $commandtoexec)
-counter=$(($counter + 1))
-#end counter
 
 
 currentincpertime=$(float_eval "$currentinc / $SLEEP")
@@ -161,8 +161,6 @@ echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertim
 
   if [ $TOTAL -gt 0 ]; then
 #####CLEAN START
-#####CLEAN END
-#####CLEAN START
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
@@ -172,8 +170,6 @@ Eta=$eta secs
 EOF
 #####CLEAN END
   else
-#####CLEAN START
-#####CLEAN END
 #####CLEAN START
 cat << EOF
 --------------------
