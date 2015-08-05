@@ -40,7 +40,7 @@ else
   exit 1;
 fi
 
-SLEEP=30
+SLEEP=1
 NOW=$(eval $CMD)
 if [ $NOW -eq $NOW 2> /dev/null ]; then
   if [ ! $NOW -ge 0 ]; then
@@ -70,10 +70,10 @@ while [ true ]; do
     PERCENT=$(echo "$LATER / $TOTAL * 100" | bc -l)
     if [ "$AVG" != "0" ]; then
       ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 1440 ) { print mins/1440; print \" days\" } else {if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}}" | bc -l)
+      ETA=$(displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l))
     fi
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
-    displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l)
   else
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER\tExecution=$EXECTIME sec"
