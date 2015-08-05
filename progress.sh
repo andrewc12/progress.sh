@@ -3,6 +3,23 @@
 #Updates a display version of the variables
 #The original script just reduced the accuracy of the actual variables
 #test: 'date +"%s"' $(($(date +"%s") + 100))
+function displaynumpertime {
+  #$(echo "scale=0; $C * 60 * 60 / 1" | bc -l)
+  local C=$1
+#  local D=$((C*60*60*24))
+  local D=$(echo "scale=0; $C * 60 * 60 *24 / 1" | bc -l)
+#  local H=$((C*60*60))
+  local H=$(echo "scale=0; $C * 60 * 60 / 1" | bc -l)
+#  local M=$((C*60))
+  local M=$(echo "scale=0; $C * 60 / 1" | bc -l)
+#  local S=$((C))
+  local S=$(echo "scale=0; $C / 1" | bc -l)
+  [[ $D > 0 ]] && printf '%d days ' $D
+  [[ $H > 0 ]] && printf '%d hours ' $H
+  [[ $M > 0 ]] && printf '%d minutes ' $M
+  [[ $D > 0 || $H > 0 || $M > 0 ]] && printf 'and '
+  printf '%d seconds\n' $S
+}
 function displaytime {
   local T=$1
   local D=$((T/60/60/24))
@@ -72,6 +89,7 @@ while [ true ]; do
       ETA=$(echo "scale=2; mins= ($TOTAL - $LATER)/ $AVG /60; if ( mins > 1440 ) { print mins/1440; print \" days\" } else {if ( mins > 60 ) { print mins/60; print \" hrs\" } else {print mins;print \" mins\"}}" | bc -l)
       ETA=$(displaytime $(echo "scale=0;($TOTAL - $LATER)/ $AVG"| bc -l))
     fi
+    DAVG=$(displaynumpertime "$AVG")
     makedvars
     echo -e "Current=$DRECS/sec\tTotalAvg=$DAVG/hr\tTotal=$DLATER/$DTOTAL $DPERCENT%\t$ETA left\tExecution=$EXECTIME sec"
   else
