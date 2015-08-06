@@ -140,56 +140,27 @@ shift $((OPTIND-1))
 
 #echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #####CLEAN START
 currentprog=$(eval $commandtoexec)
 totalinc=0
 ETA="???"
 while [ true ]; do
-  sleep $sleep
-#start counter
-previousprog=$currentprog
-currentprog=$(eval $commandtoexec)
-counter=$(($counter + 1))
-#end counter
-currentinc=$(float_eval "$currentprog - $previousprog")
-totalinc=$(float_eval "$totalinc + $currentinc")
-echo "currentinc $currentinc totalinc $totalinc"
+    sleep $sleep
+    #start counter
+    previousprog=$currentprog
+    currentprog=$(eval $commandtoexec)
+    counter=$(($counter + 1))
+    #end counter
+    currentinc=$(float_eval "$currentprog - $previousprog")
+    totalinc=$(float_eval "$totalinc + $currentinc")
+    echo "currentinc $currentinc totalinc $totalinc"
 
+    currentincpertime=$(float_eval "$currentinc / $sleep")
+    avgincpertime=$(float_eval "$totalinc / $sleep / $counter")
+    eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
+    echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
 
-
-currentincpertime=$(float_eval "$currentinc / $sleep")
-avgincpertime=$(float_eval "$totalinc / $sleep / $counter")
-eta=$(float_eval "($finish - $currentprog) /$avgincpertime")
-echo "currentprog $currentprog currentincpertime $currentincpertime avgincpertime $avgincpertime eta $eta"
-
-
-
-  if [[ $finish ]]; then
+    if [[ $finish ]]; then
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
@@ -197,14 +168,14 @@ Avg=$avgincpertime/sec
 Progress $currentprog/$finish
 Eta=$(displaytime $eta)
 EOF
-  else
+    else
 cat << EOF
 --------------------
 Current=$currentincpertime/sec
 Avg=$avgincpertime/sec
 Progress $currentprog
 EOF
-  fi
+    fi
 done
 #####CLEAN END
 exit 0
